@@ -2,11 +2,10 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 
-const tempController = require("./controllers/temp.controller")
+const tempController = require("./controllers/temp.controller");
 
+const DB_URL = require("../databaseKey");
 const PORT = 8000;
-const DB_URL =
-  "mongodb+srv://abhishek:something@freshmenudb.ejina.mongodb.net/freshMenuDatabase?retryWrites=true&w=majority";
 
 const app = express();
 app.use(express.json());
