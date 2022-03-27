@@ -2,7 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 
-const tempController = require("./controllers/temp.controller");
+const mealController = require("./controllers/meal.controller");
 
 const DB_URL = require("../databaseKey");
 const PORT = 8000;
@@ -11,7 +11,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-app.use("/temp", tempController);
+app.use("/meals", mealController);
 
 const connect = () => {
   return mongoose.connect(DB_URL);
