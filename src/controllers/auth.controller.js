@@ -2,11 +2,38 @@ const express = require("express");
 const User = require("../models/user.model");
 const Cart = require("../models/cart.model");
 const newOTP = require("otp-generators");
+const passport = require("../configs/google-oauth");
 
 const crudController = require("./crud.controller");
 const router = express.Router();
 
 const controller = crudController(User);
+
+//* Google OAuth
+
+passport.serializeUser(function (user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function (user, done) {
+  done(null, user);
+});
+
+router.get(
+  "/google",
+  passport.authenticate("google", { scope: ["email", "profile"] })
+);
+
+router.get(
+  "/google/callback",
+  passport.authenticate("google", {
+    failureRedirect: "404",
+  }),
+  (req, res) => {
+    res.status(200).json(req.user);
+    // res.redirect("http://localhost:3000/");
+  }
+);
 
 //* Create new User
 router.post("/register", async (req, res) => {
