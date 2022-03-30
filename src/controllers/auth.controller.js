@@ -4,10 +4,7 @@ const Cart = require("../models/cart.model");
 const newOTP = require("otp-generators");
 const passport = require("../configs/google-oauth");
 
-const crudController = require("./crud.controller");
 const router = express.Router();
-
-const controller = crudController(User);
 
 //* Google OAuth
 
@@ -19,6 +16,15 @@ passport.deserializeUser(function (user, done) {
   done(null, user);
 });
 
+router.get("/login/check", async (req, res) => {
+  if (!req.user) {
+    return res.status(400).json("Google Authentication Failed");
+  }
+  const { email } = req.user;
+  const user = await User.findOne({ email });
+  res.status(200).json(user);
+});
+
 router.get(
   "/google",
   passport.authenticate("google", { scope: ["email", "profile"] })
@@ -27,10 +33,10 @@ router.get(
 router.get(
   "/google/callback",
   passport.authenticate("google", {
+    successRedirect: "http://localhost:3000/",
     failureRedirect: "404",
   }),
   (req, res) => {
-    res.status(200).json(req.user);
     // res.redirect("http://localhost:3000/");
   }
 );
@@ -94,6 +100,12 @@ router.get("/login/:id/:otp", async (req, res) => {
   } else {
     res.status(400).json("");
   }
+});
+
+//* Logout user
+router.get("/logout", function (req, res) {
+  req.session.destroy(function () {});
+  res.status(200).json("Logout Success");
 });
 
 module.exports = router;
