@@ -7,7 +7,7 @@ const router = express.Router();
 const controller = crudController(Meal);
 
 //* Read Many
-router.get("/", controller.getAll);
+router.get("/all", controller.getAll);
 
 //* Get all Filters
 router.get("/filters", async (req, res) => {
