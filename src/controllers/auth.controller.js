@@ -18,7 +18,7 @@ passport.deserializeUser(function (user, done) {
 
 router.get("/login/check", async (req, res) => {
   if (!req.user) {
-    return res.status(400).json("Google Authentication Failed");
+    return res.status(401).json("Google Authentication Failed");
   }
   const { email } = req.user;
   const user = await User.findOne({ email });
